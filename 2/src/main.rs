@@ -15,6 +15,20 @@ struct CubeEntry {
     blue: u32,
 }
 
+trait Power {
+    fn power(&self) -> u32;
+}
+
+impl Power for Vec<CubeEntry> {
+    fn power(&self) -> u32 {
+        let max_red = self.iter().map(|entry| entry.red).max().unwrap_or(0);
+        let max_green = self.iter().map(|entry| entry.green).max().unwrap_or(0);
+        let max_blue = self.iter().map(|entry| entry.blue).max().unwrap_or(0);
+
+        max_red * max_green * max_blue
+    }
+}
+
 fn main() {
     let file = env::args().nth(1).expect("Please supply a file name");
     let input = fs::read_to_string(file).expect("Cannot find file");
@@ -26,7 +40,15 @@ fn main() {
         .map(|row| row.game_id)
         .sum();
 
-    println!("Sum: {}", sum);
+    println!("First Sum: {}", sum);
+
+    let sum: u32 = input
+        .lines()
+        .map(build_row)
+        .map(|row| row.cube_entries.power())
+        .sum();
+
+    println!("Second Sum: {}", sum);
 }
 
 fn build_row(row: &str) -> Row {

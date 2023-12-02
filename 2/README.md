@@ -1,4 +1,4 @@
-# Day one of advent of code 2023
+# Day two of advent of code 2023
 
 ## Run
 
