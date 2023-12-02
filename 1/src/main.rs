@@ -88,7 +88,7 @@ fn part_two(input: &str) -> u32 {
             let first = s
                 .chars()
                 .enumerate()
-                .filter_map(|(idx, c)| {
+                .find_map(|(idx, c)| {
                     if c.is_ascii_digit() {
                         return Some((String::from(c), idx));
                     }
@@ -102,12 +102,11 @@ fn part_two(input: &str) -> u32 {
                     }
                     None
                 })
-                .next()
                 .expect("First digit must exist");
 
             let last = (first.1..s.len())
                 .rev()
-                .filter_map(|idx| {
+                .find_map(|idx| {
                     if s.chars().nth(idx).unwrap().is_ascii_digit() {
                         return Some(String::from(s.chars().nth(idx).unwrap()));
                     }
@@ -122,7 +121,6 @@ fn part_two(input: &str) -> u32 {
                     }
                     None
                 })
-                .next()
                 .unwrap_or(first.0.to_string());
 
             let mut result = String::new();
