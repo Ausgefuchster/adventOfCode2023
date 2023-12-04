@@ -1,4 +1,4 @@
-use std::{cmp::min, env, fs};
+use std::{cmp::min, collections::HashMap, env, fs};
 
 #[derive(Debug, Clone)]
 struct Card {
@@ -28,27 +28,30 @@ fn main() {
         .sum();
     println!("First Sum: {}", sum);
 
-    let mut cards: Vec<Card> = input.lines().map(build_card).collect();
-    for i in 0..cards.len() {
-        cards
-            .clone()
-            .iter()
-            .filter(|card| card.id == i as u32)
-            .for_each(|card| {
-                let winning_cards = card
-                    .hand
-                    .iter()
-                    .filter(|number| card.winning.contains(number))
-                    .count();
+    let cards: Vec<Card> = input.lines().map(build_card).collect();
+    let mut map: HashMap<u32, (u32, u32)> = HashMap::new();
 
-                for i in card.id..min(cards.len() as u32, card.id + winning_cards as u32) {
-                    let card_copy = cards.get(i as usize).unwrap().clone();
-                    cards.push(card_copy)
-                }
-            })
+    for card in cards.iter() {
+        let winning_cards = card
+            .hand
+            .iter()
+            .filter(|number| card.winning.contains(number))
+            .count();
+        map.insert(card.id, (1_u32, winning_cards as u32));
     }
 
-    let sum: u32 = cards.len() as u32;
+    for card in cards.iter() {
+        let (card_count, winning_cards) = *map.get(&card.id).unwrap();
+
+        for k in card.id + 1..min(cards.len() as u32 + 1, card.id + winning_cards + 1) {
+            map.insert(
+                k,
+                (map.get(&k).unwrap().0 + card_count, map.get(&k).unwrap().1),
+            );
+        }
+    }
+
+    let sum: u32 = map.values().map(|(copies, _)| copies).sum();
     println!("Second Sum: {}", sum);
 }
 
