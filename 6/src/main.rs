@@ -55,9 +55,7 @@ fn solution_one(input: &str) -> usize {
 
 #[cfg(test)]
 mod test {
-    use std::fs;
-
-    use crate::solution_one;
+    use super::*;
 
     #[test]
     fn example() {
