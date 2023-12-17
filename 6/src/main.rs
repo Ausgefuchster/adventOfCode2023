@@ -75,9 +75,7 @@ fn solution_two(input: &str) -> usize {
         .parse()
         .unwrap();
 
-    (1..time)
-        .filter(|i| (i * (time - i)) > distance)
-        .count()
+    (1..time).filter(|i| (i * (time - i)) > distance).count()
 }
 
 #[cfg(test)]
