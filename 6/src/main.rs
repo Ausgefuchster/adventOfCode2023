@@ -5,6 +5,7 @@ fn main() {
     let input = fs::read_to_string(file).expect("Cannot find file");
 
     println!("Solution 1: {}", solution_one(&input));
+    println!("Solution 2: {}", solution_two(&input));
 }
 
 struct BoatRace {
@@ -53,13 +54,45 @@ fn solution_one(input: &str) -> usize {
         .unwrap_or(0)
 }
 
+fn solution_two(input: &str) -> usize {
+    let time: u64 = input
+        .lines()
+        .nth(0)
+        .unwrap()
+        .strip_prefix("Time:")
+        .unwrap()
+        .replace(" ", "")
+        .parse()
+        .unwrap();
+
+    let distance: u64 = input
+        .lines()
+        .nth(1)
+        .unwrap()
+        .strip_prefix("Distance:")
+        .unwrap()
+        .replace(" ", "")
+        .parse()
+        .unwrap();
+
+    (1..time)
+        .filter(|i| (i * (time - i)) > distance)
+        .count()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
 
     #[test]
-    fn example() {
+    fn one() {
         let input = fs::read_to_string("example.txt").expect("Cannot find file");
         assert_eq!(solution_one(&input), 288);
+    }
+
+    #[test]
+    fn two() {
+        let input = fs::read_to_string("example.txt").expect("Cannot find file");
+        assert_eq!(solution_two(&input), 71503);
     }
 }
